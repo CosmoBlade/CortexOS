@@ -6,7 +6,6 @@
 [bits 16]
 
 start:
-    ; Настройка сегментов
     cli
     xor ax, ax
     mov ds, ax
@@ -51,20 +50,16 @@ disk_error:
 enable_protected_mode:
     cli
 
-    ; Загружаем GDT
     lgdt [gdt_desc]
 
-    ; Включаем PE бит в CR0
     mov eax, cr0
     or eax, 1
     mov cr0, eax
 
-    ; Дальний прыжок для очистки конвейера
     jmp 0x08:protected_mode_entry
 
 [bits 32]
 protected_mode_entry:
-    ; Обновляем сегментные регистры
     mov ax, 0x10
     mov ds, ax
     mov es, ax
@@ -73,7 +68,6 @@ protected_mode_entry:
     mov ss, ax
     mov esp, 0x90000
 
-    ; Возвращаемся
     ret
 
 print_string:
